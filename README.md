@@ -26,6 +26,17 @@ Build a CLI chat app with the following workflow:
 1. When the user is done, stop the chat
 1. Ask for a binary rating for the chat (👍 or 👎)
 
+### Timeline
+
+- Week 1: Research CLI tools
+- Week 2: Scaffold out simple commander tool in code
+- Weeks 3-4 or 5: Continue to build out full toolf
+
+### To Do
+
+- Get a recurring meeting on the books
+- Devin will provide any API keys you need
+
 ---
 
 ## Usage
