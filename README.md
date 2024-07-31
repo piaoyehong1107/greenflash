@@ -18,6 +18,10 @@ Build a CLI chat app with the following workflow:
 
 1. When the user starts the program, first ask for their name (we'll use this to generate an ID)
 1. Choose one of the LLMs from a list
+    - ChatGPT*
+    - Claude
+    - Llama3
+    - Smaller, weirder models from Replicate or HuggingFace
 1. Chat with that model, with an open-ended number of inputs (prompts) and outputs (model responses)
 1. When the user is done, stop the chat
 1. Ask for a binary rating for the chat (👍 or 👎)
