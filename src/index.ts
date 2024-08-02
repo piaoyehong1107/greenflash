@@ -1,5 +1,17 @@
+import { Command } from 'commander';
 import readlineSync from 'readline-sync';
 import axios from 'axios';
+
+// Initialize Commander
+const program = new Command();
+
+program
+  .version('1.0.0')
+  .description('CLI Chat Application with LLM API Integration')
+  .option('-m, --model <model>', 'Specify the LLM model to use');
+  // .option('-m, --model <model>', 'Specify the LLM model to use', 'GPT-3');
+
+program.parse(process.argv);
 
 // Define LLM options
 const llms = [
@@ -87,19 +99,21 @@ class ChatApp {
 // Prompt for user name
 const userName = readlineSync.question('Please enter your name: ');
 
-// Prompt for LLM selection
-const llmNames = llms.map(llm => llm.name);
-const selectedLLMName = readlineSync.keyInSelect(llmNames, 'Choose a language model:');
-if (selectedLLMName === -1) {
-  console.log('No selection made. Exiting...');
-  process.exit(1);
-}
-
-// Find the selected LLM
-const selectedLLM = llms.find(llm => llm.name === llmNames[selectedLLMName]);
+// Prompt for LLM selection if not provided via command-line arguments
+const options = program.opts();
+let selectedLLM = llms.find(llm => llm.name === options.model);
 if (!selectedLLM) {
-  console.log('Invalid LLM selection. Exiting...');
-  process.exit(1);
+  const llmNames = llms.map(llm => llm.name);
+  const selectedLLMIndex = readlineSync.keyInSelect(llmNames, 'Choose a language model:');
+  if (selectedLLMIndex === -1) {
+    console.log('No selection made. Exiting...');
+    process.exit(1);
+  }
+  selectedLLM = llms.find(llm => llm.name === llmNames[selectedLLMIndex]);
+  if (!selectedLLM) {
+    console.log('Invalid LLM selection. Exiting...');
+    process.exit(1);
+  }
 }
 
 // Start the chat application
