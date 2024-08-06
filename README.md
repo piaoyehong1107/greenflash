@@ -41,9 +41,9 @@ Build a CLI chat app with the following workflow:
 
 ### Dependencise
 
-commander.js: Command-Line Arguments
-readline-sync: intercative prompts/ A library for synchronous command-line input
-axios: make HTTP requests
+- commander.js: Command-Line Arguments
+- readline-sync: intercative prompts/ A library for synchronous command-line input
+- axios: make HTTP requests
 
 ---
 
