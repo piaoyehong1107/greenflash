@@ -39,6 +39,12 @@ Build a CLI chat app with the following workflow:
 - Get a recurring meeting on the books
 - Devin will provide any API keys you need
 
+### Dependencise
+
+commander.js: Command-Line Arguments
+readline-sync: intercative prompts/ A library for synchronous command-line input
+axios: make HTTP requests
+
 ---
 
 ## Usage
