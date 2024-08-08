@@ -45,6 +45,13 @@ Build a CLI chat app with the following workflow:
 - readline-sync: intercative prompts/ A library for synchronous command-line input
 - axios: make HTTP requests
 
+### Files
+
+- api.ts: Contains all API-related logic, such as making HTTP requests using axios.
+- chat.ts: Manages the chat logic and interacts with the API service to fetch responses from the selected LLM.
+- cli.ts: Sets up the CLI commands and ensures asynchronous actions are handled appropriately.
+- main.ts: Remains the entry point of the application.
+
 ---
 
 ## Usage
