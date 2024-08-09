@@ -22,9 +22,35 @@ Build a CLI chat app with the following workflow:
     - Claude
     - Llama3
     - Smaller, weirder models from Replicate or HuggingFace
+
+    
 1. Chat with that model, with an open-ended number of inputs (prompts) and outputs (model responses)
 1. When the user is done, stop the chat
 1. Ask for a binary rating for the chat (👍 or 👎)
+
+### Timeline
+
+- Week 1: Research CLI tools
+- Week 2: Scaffold out simple commander tool in code
+- Weeks 3-4 or 5: Continue to build out full toolf
+
+### To Do
+
+- Get a recurring meeting on the books
+- Devin will provide any API keys you need
+
+### Dependencise
+
+- commander.js: Command-Line Arguments
+- readline-sync: intercative prompts/ A library for synchronous command-line input
+- axios: make HTTP requests
+
+### Files
+
+- api.ts: Contains all API-related logic, such as making HTTP requests using axios.
+- chat.ts: Manages the chat logic and interacts with the API service to fetch responses from the selected LLM.
+- cli.ts: Sets up the CLI commands and ensures asynchronous actions are handled appropriately.
+- main.ts: Remains the entry point of the application.
 
 ---
 
