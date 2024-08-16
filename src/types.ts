@@ -12,5 +12,7 @@ export interface ReplicateResponse {
   id: string;
   output: string;
   status: string;
-  // Add other properties as needed based on the API response
+  predictions: Array<{
+    content: string;
+  }>
 }

@@ -1,17 +1,22 @@
-import * as dotenv from 'dotenv';
+import dotenv from 'dotenv';
 dotenv.config();
 
 import axios from "axios";
+import { OpenAIResponse, ReplicateResponse } from "./types";
 const apiKey = process.env.OPENAI_API_KEY;
-const replicateApiKey = process.env.REPLICATE_APT_TOKEN;
-import { OpenAIResponse } from "./types";
-import { ReplicateResponse } from './types';
+const replicateApiKey = process.env.REPLICATE_API_TOKEN;
 
 if (!apiKey) {
     throw new Error(
       "The OPENAI_API_KEY environment variable is missing or empty.",
     );
   }
+
+if (!replicateApiKey) {
+    throw new Error(
+        'The REPLICATE_API_KEY environment variable is missing or empty.'
+    );
+}
 
 const openaiBaseUrl = "https://api.openai.com/v1/chat/completions";
 
@@ -31,7 +36,6 @@ export async function fetchLLMResponse(query: string): Promise<string> {
         },
       },
     );
-
     return response.data.choices[0]?.message?.content || "No response";
   } catch (error) {
     console.error("Error fetching LLM response:", error);
@@ -39,31 +43,30 @@ export async function fetchLLMResponse(query: string): Promise<string> {
   }
 }
 
-if (!replicateApiKey) {
-    throw new Error('The REPLICATE_API_KEY environment variable is missing or empty.');
-}
-
-const replicateBaseUrl = "https://api.replicate.com/v1/predictions";
+const replicateBaseUrl = 'https://api.replicate.com/v1/predictions';
 
 export async function fetchReplicateResponse(query: string): Promise<string> {
-    try {
-        const response = await axios.post<ReplicateResponse>(
-            replicateBaseUrl,
-            {
-                version: 'xqimjrdbqat35q43ivzclgrzlu', // Replace with the specific version of the model you're using
-                input: { prompt: query },
-            },
-            {
-                headers: {
-                    'Authorization': `Token ${replicateApiKey}`,
-                    'Content-Type': 'application/json',
-                },
-            }
-        );
-
-        return response.data.output || 'No response';
-    } catch (error) {
-        console.error('Error fetching Replicate response:', error);
-        throw error;
-    }
+  try {
+    const response = await axios.post<ReplicateResponse>(
+      replicateBaseUrl,
+      {
+        version: 'mistralai/mistral-7b-instruct-v0.2:f5701ad8',
+        input: {
+          text: query,
+        },
+      },
+      {
+        headers: {
+          'Authorization': `Token ${replicateApiKey}`,
+          'Content-Type': 'application/json',
+        },
+      }
+    );
+    return response.data?.predictions[0]?.content || "No response";
+  } catch (error) {
+    console.error('Error calling Replicate API:', error);
+    throw new Error('Failed to get response from Replicate API');
+  }
 }
+
+
