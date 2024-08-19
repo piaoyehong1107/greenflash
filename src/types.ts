@@ -8,11 +8,12 @@ export interface OpenAIResponse {
   choices: OpenAIChoice[];
 }
 
-export interface ReplicateResponse {
-  id: string;
-  output: string;
-  status: string;
-  predictions: Array<{
+export interface ReplicateAIChoice {
+  message: {
     content: string;
-  }>
+  };
+}
+
+export interface ReplicateResponse {
+  choices: ReplicateAIChoice[];
 }

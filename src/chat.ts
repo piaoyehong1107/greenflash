@@ -1,11 +1,12 @@
-import * as readlineSync from "readline-sync";
-import { llmNames } from "./llms";
-import { fetchLLMResponse, fetchReplicateResponse } from "./api";
+import * as readlineSync from 'readline-sync';
+import { llmNames } from './llms';
+import { fetchLLMResponse, fetchReplicateResponse } from './api';
+import { askForRating } from './user';
 
 export async function startChat(): Promise<void> {
-  const index = readlineSync.keyInSelect(llmNames, "Which LLM?");
+  const index = readlineSync.keyInSelect(llmNames, 'Which LLM?');
   if (index === -1) {
-    console.log("No model selected, exiting.");
+    console.log('No model selected, exiting.');
     return;
   }
 
@@ -15,8 +16,8 @@ export async function startChat(): Promise<void> {
   do {
     query = readlineSync.question('Enter your query (type "exit" to quit): ');
 
-    if (query.toLowerCase() === "exit") {
-      console.log("Exiting the chat. Goodbye!");
+    if (query.toLowerCase() === 'exit') {
+      console.log('Exiting the chat. Goodbye!');
       break;
     }
 
@@ -25,15 +26,17 @@ export async function startChat(): Promise<void> {
 
       if (llmNames[index] === 'Replicate') {
         response = await fetchReplicateResponse(query);
-        console.log("Response from Replicate:", response);
+        console.log('Response from Replicate:', response);
       } else {
         response = await fetchLLMResponse(query);
-        console.log("Response from GPT-4:", response);
+        console.log('Response from GPT-4:', response);
       }
     } catch (error) {
       console.error(`Failed to fetch response from ${llmNames[index]}:`, error);
     }
 
-  } while (query.toLowerCase() !== "exit");
+  } while (query.toLowerCase() !== 'exit');
+
+  askForRating();
 }
 
