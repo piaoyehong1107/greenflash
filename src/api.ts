@@ -20,11 +20,9 @@ const openaiBaseUrl = 'https://api.openai.com/v1/chat/completions';
 const replicateBaseUrl = 'https://api.replicate.com/v1/predictions';
 
 function handleExit() {
-  // Call askForRating to prompt the user before exit
   askForRating();
 }
 
-// Register exit event handlers
 process.on('SIGINT', () => {
   console.log('\nExiting...');
   handleExit();
