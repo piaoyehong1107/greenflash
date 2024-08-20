@@ -18,7 +18,7 @@ if (!replicateApiKey) {
 }
 
 const openaiBaseUrl = 'https://api.openai.com/v1/chat/completions';
-const replicateBaseUrl = 'https://api.replicate.com/v1/models/mistralai/mistral-7b-instruct-v0.2/predictions';
+const replicateBaseUrl = 'https://api.replicate.com/v1/predictions';
 
 function handleExit() {
   askForRating();
@@ -63,53 +63,28 @@ export async function fetchLLMResponse(query: string): Promise<string> {
   }
 }
 
-// export async function fetchReplicateResponse(query: string): Promise<string> {
-//   try {
-//     const response = await axios.post<ReplicateResponse>(
-//       replicateBaseUrl,
-//       {
-//         input: {
-//           prompt: query,
-//           // max_tokens: 1024
-//         }
-//       },
-//       {
-//         headers: {
-//           Authorization: `Bearer ${replicateApiKey}`,
-//           'Content-Type': 'application/json'
-//         }
-//       }
-//     );
-//     return response.data.choices[0]?.message?.content || 'No response';
-//   } catch (error) {
-//     console.error('Error calling Replicate API:', error);
-//     throw new Error('Failed to get response from Replicate API');
-//   }
-// }
-
 export async function fetchReplicateResponse(query: string): Promise<string> {
   const input = {
     top_k: 50,
     top_p: 0.9,
     prompt: query,
     temperature: 0.6,
-    system_prompt: "You are a very helpful, respectful and honest assistant.",
     length_penalty: 1,
     max_new_tokens: 512,
     prompt_template: "<s>[INST] {prompt} [/INST] ",
     presence_penalty: 0,
   };
 
-  let result = '';  // To accumulate the response
+  let result = '';  
 
   try {
-    for await (const event of replicate.stream("mistralai/mistral-7b-instruct-v0.2", { input })) {
+    for await (const event of replicate.stream("meta/meta-llama-3-8b", { input })) {
       const eventString = event.toString();
       process.stdout.write(eventString);
-      result += eventString;  // Append each event to the result
+      result += eventString;
     }
 
-    return result;  // Return the accumulated result as a string
+    return result;
 
   } catch (error) {
     console.error('Error calling Replicate API:', error);
