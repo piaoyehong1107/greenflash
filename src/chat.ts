@@ -25,7 +25,7 @@ export async function startChat(): Promise<void> {
       let response: string;
 
       if (llmNames[index] === 'Replicate') {
-        response = await fetchReplicateResponse(query);
+        response = await fetchReplicateResponse(query);  // Now returns a string
         console.log('Response from Replicate:', response);
       } else {
         response = await fetchLLMResponse(query);

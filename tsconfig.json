@@ -2,9 +2,9 @@
   "display": "Node LTS",
   "_version": "20.1.0",
   "compilerOptions": {
-    "lib": ["es2023"],
+    "lib": ["ESNext", "DOM"],
     "module": "node16",
-    "target": "es2022",
+    "target": "ESNext",
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
