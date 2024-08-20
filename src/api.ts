@@ -1,6 +1,6 @@
 import dotenv from 'dotenv';
 import axios from 'axios';
-import { OpenAIResponse, ReplicateResponse } from './types';
+import { OpenAIResponse } from './types';
 import { askForRating } from './user'
 import Replicate from 'replicate';
 
@@ -18,7 +18,6 @@ if (!replicateApiKey) {
 }
 
 const openaiBaseUrl = 'https://api.openai.com/v1/chat/completions';
-const replicateBaseUrl = 'https://api.replicate.com/v1/predictions';
 
 function handleExit() {
   askForRating();
