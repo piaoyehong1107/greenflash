@@ -4,18 +4,26 @@
   "description": "TypeScript Chat is a CLI tool that allows you to chat with a number of different LLMs.",
   "main": "index.js",
   "scripts": {
-    "start": "ts-node src/main.ts"
+    "start": "ts-node src/main.ts",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "commander": "^12.1.0"
+    "axios": "^1.7.3",
+    "commander": "^12.1.0",
+    "dotenv": "^16.4.5",
+    "openai": "^4.55.4",
+    "replicate": "^0.32.0"
   },
   "devDependencies": {
     "@types/axios": "^0.9.36",
     "@types/node": "^22.1.0",
     "@types/readline-sync": "^1.4.8",
+    "@typescript-eslint/parser": "^8.1.0",
+    "prettier": "^3.3.3",
     "readline-sync": "^1.4.10",
     "ts-node": "^10.9.2",
     "typescript": "^5.5.4"

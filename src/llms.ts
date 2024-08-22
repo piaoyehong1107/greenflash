@@ -1,13 +1,11 @@
 type LLM = {
-    name: string;
-    apiKey: string;
-}
+  name: string;
+};
 
 const llms: LLM[] = [
-    { name: 'GPT-4', apiKey: 'MY_API_KEY' },
-    { name: 'Claude', apiKey: 'MY_API_KEY' },
-    { name: 'Llama3', apiKey: 'MY_API_KEY' }
+  { name: "GPT-4"},
+  { name: "Replicate"},
 ];
-const llmNames = llms.map(llm => llm.name);
+const llmNames = llms.map((llm) => llm.name);
 
-export { llms, llmNames };
+export {llmNames};

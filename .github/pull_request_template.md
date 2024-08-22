@@ -21,4 +21,3 @@ Please include a summary of the change, which issue is fixed, and any additional
 ## Screenshots
 
 Please include a screenshot of the changes, if applicable.
-
