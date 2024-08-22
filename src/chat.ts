@@ -1,6 +1,6 @@
 import * as readlineSync from 'readline-sync';
 import { llmNames } from './llms';
-import { fetchLLMResponse, fetchReplicateResponse } from './api';
+import { fetchOpenaiResponse, fetchReplicateResponse } from './api';
 import { askForRating } from './user';
 
 export async function startChat(): Promise<void> {
@@ -25,10 +25,10 @@ export async function startChat(): Promise<void> {
       let response: string;
 
       if (llmNames[index] === 'Replicate') {
-        response = await fetchReplicateResponse(query);  // Now returns a string
+        response = await fetchReplicateResponse(query);
         console.log('Response from Replicate:', response);
       } else {
-        response = await fetchLLMResponse(query);
+        response = await fetchOpenaiResponse(query);
         console.log('Response from GPT-4:', response);
       }
     } catch (error) {
