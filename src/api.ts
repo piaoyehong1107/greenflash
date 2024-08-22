@@ -1,15 +1,16 @@
 import dotenv from 'dotenv';
 import axios from 'axios';
 import { OpenAIResponse } from './types';
-import { askForRating } from './user'
 import Replicate from 'replicate';
 
 dotenv.config();
 
-const apiKey = process.env.OPENAI_API_KEY;
+const openaiApiKey = process.env.OPENAI_API_KEY;
 const replicateApiKey = process.env.REPLICATE_API_TOKEN;
+const openaiModelName = process.env.OPENAI_MODEL_NAME ;
+const replicatelModelName= process.env.REPLICATE_MODEL_NAME;
 
-if (!apiKey) {
+if (!openaiApiKey) {
   throw new Error('The OPENAI_API_KEY environment variable is missing or empty.');
 }
 
@@ -19,38 +20,22 @@ if (!replicateApiKey) {
 
 const openaiBaseUrl = 'https://api.openai.com/v1/chat/completions';
 
-function handleExit() {
-  askForRating();
-}
-
-process.on('SIGINT', () => {
-  console.log('\nExiting...');
-  handleExit();
-  process.exit();
-});
-
-process.on('SIGTERM', () => {
-  console.log('\nTerminating...');
-  handleExit();
-  process.exit();
-});
-
 const replicate = new Replicate({
   auth: replicateApiKey,
 });
 
-export async function fetchLLMResponse(query: string): Promise<string> {
+export async function fetchOpenaiResponse(query: string): Promise<string> {
   try {
     const response = await axios.post<OpenAIResponse>(
       openaiBaseUrl,
       {
-        model: 'gpt-3.5-turbo',
+        model: openaiModelName,
         messages: [{ role: 'user', content: query }],
         max_tokens: 100,
       },
       {
         headers: {
-          Authorization: `Bearer ${apiKey}`,
+          Authorization: `Bearer ${openaiApiKey}`,
           'Content-Type': 'application/json',
         },
       }
@@ -78,7 +63,7 @@ export async function fetchReplicateResponse(query: string): Promise<string> {
   let result = '';  
 
   try {
-    for await (const event of replicate.stream("mistralai/mistral-7b-instruct-v0.2", { input })) {
+    for await (const event of replicate.stream(replicatelModelName as `${string}/${string}` | `${string}/${string}:${string}` , { input })) {
       const eventString = event.toString();
       process.stdout.write(eventString);
       result += eventString;
