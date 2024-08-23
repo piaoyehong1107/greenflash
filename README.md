@@ -27,8 +27,8 @@ Build a CLI chat app with the following workflow:
 1. Chat with that model, with an open-ended number of inputs (prompts) and outputs (model responses)
 1. When the user is done, stop the chat
 1. Ask for a binary rating for the chat (👍 or 👎)
-1. Ask if the user wants to associate a "converversion" with the chat (default No)
-   - If yes, ask for a value for the conversion
+1. Ask if the user wants to associate a "conversion" with the chat (default No)
+   - If yes, ask for a value for the conversion (e.g., $10)
    - If no, end the process
 
 ### Timeline
