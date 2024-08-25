@@ -6,7 +6,7 @@ TypeScript Chat is a CLI tool that allows you to chat with a number of different
 
 ## Project Description
 
-Write a command line tool that allows users to chat with different LLMs, then rate the chat quality.
+Write a command line tool that allows users to chat with different LLMs, then rate the chat quality and associate conversions.
 
 ### Prerequisites
 
@@ -17,25 +17,25 @@ Write a command line tool that allows users to chat with different LLMs, then ra
 Build a CLI chat app with the following workflow:
 
 1. When the user starts the program, first ask for their name (we'll use this to generate an ID)
-1. Choose one of the LLMs from a list
-   - ChatGPT\*
+   - Generate a hash based on the name they input. You can write your own hashing algorithm (like a simple FNV-1a), or use any open source package that generates hashes (MurmurHash, MD5, SHA1, etc.). The only requirements are that the hash always return the same value for the same name, but that different names always result in a different hash.
+1. Choose one of the LLMs from a list (default ChatGPT)
+   - ChatGPT
    - Claude
    - Llama3
    - Smaller, weirder models from Replicate or HuggingFace
+1. Ask the user if they want to provide a custom system-level prompt prior to chatting (default No)
 1. Chat with that model, with an open-ended number of inputs (prompts) and outputs (model responses)
 1. When the user is done, stop the chat
 1. Ask for a binary rating for the chat (👍 or 👎)
+1. Ask if the user wants to associate a "conversion" with the chat (default No)
+   - If yes, ask for a value for the conversion (e.g., $10)
+   - If no, end the process
 
 ### Timeline
 
 - Week 1: Research CLI tools
 - Week 2: Scaffold out simple commander tool in code
-- Weeks 3-4 or 5: Continue to build out full toolf
-
-### To Do
-
-- Get a recurring meeting on the books
-- Devin will provide any API keys you need
+- Weeks 3-4 or 5: Continue to build out full tool
 
 ### Dependencise
 
@@ -59,11 +59,12 @@ To run the application:
 1. Copy the example environment file: `cp .env.example .env`
 1. Add API keys in the `.env` file for whichever models you want to be able to chat with
 1. Download dependencies: `pnpm i`
-1. Run the following to start the app: `pnpm run xxxx`
+1. Run the following to start the app: `pnpm start`
 
 Then step through the following options and get chatting:
 
+- Add your name to associate chats with the right person
 - Choose a model to chat with
 - Add a custom system prompt, if you want to update the default prompt
 
-At the end of the chat, provide a rating for the quality of the interaction.
+At the end of the chat, provide a rating for the quality of the interaction. Optionally, also associate the chat with a conversion and value for that conversion.
