@@ -16,6 +16,10 @@ Write a command line tool that allows users to chat with different LLMs, then ra
 
 Build a CLI chat app with the following workflow:
 
+0. Before starting the process, the user can pass in flags for their name (step 1) and model choice (step 2) below. Doing so should pass those values to those steps and skip asking the user when the process starts.
+   - E.g., `pnpm start -- --name "devin owen" --model chatgpt`
+   - If both are supplied, take the user directly to step 3 (chatting with the model)
+   - If only one is supplied, skip the step for that input
 1. When the user starts the program, first ask for their name (we'll use this to generate an ID)
    - Generate a hash based on the name they input. You can write your own hashing algorithm (like a simple FNV-1a), or use any open source package that generates hashes (MurmurHash, MD5, SHA1, etc.). The only requirements are that the hash always return the same value for the same name, but that different names always result in a different hash.
 1. Choose one of the LLMs from a list (default ChatGPT)
@@ -60,6 +64,8 @@ To run the application:
 1. Add API keys in the `.env` file for whichever models you want to be able to chat with
 1. Download dependencies: `pnpm i`
 1. Run the following to start the app: `pnpm start`
+   - You can optionally pass two flags when starting the process: `name` and `model`. These pre-set the inputs for steps 1 and/or 2 below and allow you to skip directly to chatting with the chosen model.
+   - E.g., `pnpm start -- --name "devin owen" --model chatgpt`
 
 Then step through the following options and get chatting:
 
