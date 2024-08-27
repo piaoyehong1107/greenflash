@@ -1,23 +1,29 @@
 import { Command } from "commander";
 import { getUserName } from "./user";
-import { startChat } from "./chat";
+import { startChat, askForModelChoice } from "./chat";
 import { askForRating } from './user';
 
 const program = new Command();
 
 program
-  .version("1.0.0")
-  .description("CLI Chat Application with LLM")
-  .action(async () => {
-    const userName = getUserName();
+  .version('1.0.0')
+  .description('CLI Chat Application with LLM')
+  .option('-n, --name <name>', 'Specify your name')
+  .option('-m, --model <model>', 'Choose the model to use')
+  .action(async (options) => {
+    let userName = options.name || await getUserName(); 
+    let modelName = options.model || await askForModelChoice(); 
+
     console.log(`Hello, ${userName}! Welcome to the CLI application.`);
-    await startChat();
+    console.log(`Model chosen: ${modelName}`);
+
+    console.log(`Processing directly to chat...`);
+    await startChat(modelName);
   });
 
 program.parse(process.argv);
 
 function handleExit() {
-  askForRating();
   process.exit();
 }
 
