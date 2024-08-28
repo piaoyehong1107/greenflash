@@ -1,7 +1,6 @@
 import { Command } from "commander";
 import { getUserName } from "./user";
 import { startChat, askForModelChoice } from "./chat";
-import { askForRating } from './user';
 
 const program = new Command();
 
@@ -16,8 +15,9 @@ program
 
     console.log(`Hello, ${userName}! Welcome to the CLI application.`);
     console.log(`Model chosen: ${modelName}`);
-
-    console.log(`Processing directly to chat...`);
+    if (userName & modelName){
+      console.log(`Processing to chat...`);
+    }
     await startChat(modelName);
   });
 
