@@ -8,4 +8,4 @@ const llms: LLM[] = [
 ];
 const llmNames = llms.map((llm) => llm.name);
 
-export {llmNames};
+export { llmNames, llms };

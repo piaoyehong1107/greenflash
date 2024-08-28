@@ -1,16 +1,34 @@
 import * as readlineSync from 'readline-sync';
-import { llmNames } from './llms';
+import { llmNames, llms } from './llms';
 import { fetchOpenaiResponse, fetchReplicateResponse } from './api';
 import { askForRating } from './user';
 
-export async function startChat(): Promise<void> {
-  const index = readlineSync.keyInSelect(llmNames, 'Which LLM?');
-  if (index === -1) {
-    console.log('No model selected, exiting.');
-    return;
+export async function askForModelChoice(): Promise<string> {
+
+  console.log('Please choose a model:');
+  llmNames.forEach((model, index) => {
+    console.log(`${index + 1}. ${model}`);
+  });
+
+  const choiceIndex = readlineSync.questionInt('Enter the number corresponding to your model choice: ') - 1;
+
+  if (choiceIndex < 0 || choiceIndex >= llmNames.length) {
+    console.log('Invalid choice. Please try again.');
+    return askForModelChoice();
+  }
+  return llmNames[choiceIndex];
+}
+
+export async function startChat(modelName: string): Promise<void> {
+
+  const selectedLLM = llms.find(llm => llm.name.toLowerCase() === modelName.toLowerCase());
+
+  if (!selectedLLM) {
+    console.log(`Invalid model: ${modelName}. Please choose a valid model.`);
+    modelName = await askForModelChoice();
   }
 
-  console.log(`You started chat with ${llmNames[index]}`);
+  console.log(`Starting chat with model: ${modelName}`);
 
   let query: string;
   do {
@@ -24,7 +42,7 @@ export async function startChat(): Promise<void> {
     try {
       let response: string;
 
-      if (llmNames[index] === 'Replicate') {
+      if (modelName === 'Replicate') {
         response = await fetchReplicateResponse(query);
         console.log('Response from Replicate:', response);
       } else {
@@ -32,11 +50,10 @@ export async function startChat(): Promise<void> {
         console.log('Response from GPT-4:', response);
       }
     } catch (error) {
-      console.error(`Failed to fetch response from ${llmNames[index]}:`, error);
+      console.error(`Failed to fetch response from ${modelName}:`, error);
     }
 
   } while (query.toLowerCase() !== 'exit');
 
   askForRating();
 }
-
