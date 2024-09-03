@@ -55,9 +55,8 @@ export async function startChat(modelName: string): Promise<void> {
     try {
       let response: string;
       const fullPrompt = `${systemPrompt}\n${conversationHistory.join('\n')}`
-      // console.log(fullPrompt)
 
-      if (modelName === 'Replicate') {
+      if (modelName === 'replicate') {
         response = await fetchReplicateResponse(query, fullPrompt);
         console.log('Response from Replicate:', response);
       } else {
@@ -65,7 +64,7 @@ export async function startChat(modelName: string): Promise<void> {
         console.log('Response from GPT-4:', response);
       }
 
-      conversationHistory.push(`Model: ${response}`)
+      conversationHistory.push(`${modelName}: ${response}`)
 
     } catch (error) {
       console.error(`Failed to fetch response from ${modelName}:`, error);
