@@ -31,33 +31,42 @@ export async function startChat(modelName: string): Promise<void> {
   console.log(`Starting chat with model: ${modelName}`);
 
   let query: string;
-  let prompt: string
-  do {
-    prompt = readlineSync.question("Would you like to provide a system prompt?(Default No)", {
-      defaultInput: 'No'
-    })
-    if (prompt.toLowerCase() ==='no'){
-      console.log("No system prompt provided. Continuing with the default behavior.")
-    } else{
-      console.log("System prompt provided:", prompt)
-    }
-    query = readlineSync.question('Enter your query (type "exit" to quit): ');
+  let systemPrompt: string
+  let conversationHistory: string[] = [];
 
+ systemPrompt = readlineSync.question("Would you like to provide a system systemPrompt?(Default No)", {
+    defaultInput: 'No'
+  })
+  if (systemPrompt.toLowerCase() ==='no'){
+    console.log("No system systemPrompt provided. Continuing with the default behavior.")
+  } else{
+    console.log("System systemPrompt provided:", systemPrompt)
+    conversationHistory.push(`System: ${systemPrompt}`)
+  }
+
+  do {
+    query = readlineSync.question('Enter your query (type "exit" to quit): ');
     if (query.toLowerCase() === 'exit') {
       console.log('Exiting the chat. Goodbye!');
       break;
     }
+    conversationHistory.push(`You: ${query}`);
 
     try {
       let response: string;
+      const fullPrompt = `${systemPrompt}\n${conversationHistory.join('\n')}`
+      // console.log(fullPrompt)
 
       if (modelName === 'Replicate') {
-        response = await fetchReplicateResponse(query, prompt);
+        response = await fetchReplicateResponse(query, fullPrompt);
         console.log('Response from Replicate:', response);
       } else {
-        response = await fetchOpenaiResponse(query, prompt);
+        response = await fetchOpenaiResponse(query, fullPrompt);
         console.log('Response from GPT-4:', response);
       }
+
+      conversationHistory.push(`Model: ${response}`)
+
     } catch (error) {
       console.error(`Failed to fetch response from ${modelName}:`, error);
     }
