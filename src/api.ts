@@ -24,14 +24,14 @@ const replicate = new Replicate({
   auth: replicateApiKey,
 });
 
-export async function fetchOpenaiResponse(query: string, prompt: string): Promise<string> {
+export async function fetchOpenaiResponse(query: string, systemPrompt: string): Promise<string> {
   try {
     const response = await axios.post<OpenAIResponse>(
       openaiBaseUrl,
       {
         model: openaiModelName,
         messages: [
-          { role: "system", content: prompt },
+          { role: "system", content: systemPrompt },
           { role: 'user', content: query }
         ],
         max_tokens: 100,
@@ -50,13 +50,13 @@ export async function fetchOpenaiResponse(query: string, prompt: string): Promis
   }
 }
 
-export async function fetchReplicateResponse(query: string, prompt: string): Promise<string> {
+export async function fetchReplicateResponse(query: string, systemPrompt: string): Promise<string> {
   const input = {
     top_k: 50,
     top_p: 0.9,
     prompt: query,
     temperature: 0.6,
-    system_prompt: prompt,
+    system_prompt: systemPrompt,
     length_penalty: 1,
     max_new_tokens: 512,
     prompt_template: "<s>[INST] {prompt} [/INST] ",
@@ -68,7 +68,6 @@ export async function fetchReplicateResponse(query: string, prompt: string): Pro
   try {
     for await (const event of replicate.stream(replicateModelName, { input })) {
       const eventString = event.toString();
-      process.stdout.write(eventString);
       result += eventString;
     }
 
