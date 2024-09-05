@@ -58,7 +58,7 @@ export async function startChat(modelName: string): Promise<void> {
       const fullPrompt = `${systemPrompt}\n${conversationHistory.join('\n')}`
       console.log(fullPrompt)
 
-      if (modelName === 'replicate') {
+      if (modelName.toLowerCase() === 'replicate') {
         response = await fetchReplicateResponse(query, fullPrompt);
         console.log('Response from Replicate:', response);
       } else {
