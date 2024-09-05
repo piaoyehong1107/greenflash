@@ -56,6 +56,7 @@ export async function startChat(modelName: string): Promise<void> {
     try {
       let response: string;
       const fullPrompt = `${systemPrompt}\n${conversationHistory.join('\n')}`
+      console.log(fullPrompt)
 
       if (modelName === 'replicate') {
         response = await fetchReplicateResponse(query, fullPrompt);
