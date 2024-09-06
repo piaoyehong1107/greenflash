@@ -24,6 +24,30 @@ const replicate = new Replicate({
   auth: replicateApiKey,
 });
 
+function formatConversationHistory(messages: string): string {
+  let formattedHistory = '<|begin_of_text|>';
+  const lines = messages.split('\n');
+
+  lines.forEach((line) => {
+    const [role, content] = line.split(': ', 2);
+    let mappedRole;
+    if (role.toLowerCase() === 'system') {
+      mappedRole = 'system';
+    } else if (role.toLowerCase() === 'you') {
+      mappedRole = 'user';
+    } else {
+      mappedRole = 'assistant'; 
+    }
+
+    const header = `<|start_header_id|>${mappedRole}<|end_header_id|>`;
+    const separator = '<|eot_id|>';
+    
+    formattedHistory += `${header}\n\n${content}${separator}`;
+  });
+
+  return formattedHistory;
+}
+
 export async function fetchOpenaiResponse(query: string, systemPrompt: string): Promise<string> {
   try {
     const response = await axios.post<OpenAIResponse>(
@@ -51,12 +75,14 @@ export async function fetchOpenaiResponse(query: string, systemPrompt: string): 
 }
 
 export async function fetchReplicateResponse(query: string, systemPrompt: string): Promise<string> {
+  const formattedsystemPrompt= formatConversationHistory(systemPrompt)
+  console.log(formattedsystemPrompt)
   const input = {
     top_k: 50,
     top_p: 0.9,
     prompt: query,
     temperature: 0.6,
-    system_prompt: systemPrompt,
+    system_prompt: formattedsystemPrompt,
     length_penalty: 1,
     max_new_tokens: 512,
     prompt_template: "<s>[INST] {prompt} [/INST] ",
