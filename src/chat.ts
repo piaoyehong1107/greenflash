@@ -59,7 +59,7 @@ export async function startChat(modelName: string): Promise<void> {
       // console.log(fullPrompt)
 
       if (modelName.toLowerCase() === 'replicate') {
-        response = await fetchReplicateResponse(query, fullPrompt);
+        response = await fetchReplicateResponse(systemPrompt, fullPrompt);
         console.log('Response from Replicate:', response);
       } else {
         response = await fetchOpenaiResponse(query, fullPrompt);
