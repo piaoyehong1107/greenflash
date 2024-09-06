@@ -24,7 +24,8 @@ const replicate = new Replicate({
   auth: replicateApiKey,
 });
 
-export async function fetchOpenaiResponse(query: string, systemPrompt: string): Promise<string> {
+export async function fetchOpenaiResponse(systemPrompt: string, fullPrompt: string): Promise<string> {
+  console.log(fullPrompt)
   try {
     const response = await axios.post<OpenAIResponse>(
       openaiBaseUrl,
@@ -32,7 +33,7 @@ export async function fetchOpenaiResponse(query: string, systemPrompt: string): 
         model: openaiModelName,
         messages: [
           { role: "system", content: systemPrompt },
-          { role: 'user', content: query }
+          { role: 'user', content: fullPrompt }
         ],
         max_tokens: 100,
       },

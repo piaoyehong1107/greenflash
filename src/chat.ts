@@ -62,7 +62,7 @@ export async function startChat(modelName: string): Promise<void> {
         response = await fetchReplicateResponse(systemPrompt, fullPrompt);
         console.log('Response from Replicate:', response);
       } else {
-        response = await fetchOpenaiResponse(query, fullPrompt);
+        response = await fetchOpenaiResponse(systemPrompt, fullPrompt);
         console.log('Response from GPT-4:', response);
       }
 
