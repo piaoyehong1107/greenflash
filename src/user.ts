@@ -1,7 +1,11 @@
 import * as readlineSync from "readline-sync";
+import * as crypto from 'crypto';
 
 export function getUserName(): string {
   return readlineSync.question("What is your name? ");
+}
+export function generateHash(name: string): string {
+  return crypto.createHash('md5').update(name).digest('hex');
 }
 
 export function askForRating(): void {

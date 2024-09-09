@@ -21,13 +21,6 @@ export async function askForModelChoice(): Promise<string> {
 
 export async function startChat(modelName: string): Promise<void> {
 
-  const selectedLLM = llms.find(llm => llm.name.toLowerCase() === modelName.toLowerCase());
-
-  if (!selectedLLM) {
-    console.log(`Invalid model: ${modelName}. Please choose a valid model.`);
-    modelName = await askForModelChoice();
-  }
-
   console.log(`Starting chat with model: ${modelName}`);
 
   let query: string;

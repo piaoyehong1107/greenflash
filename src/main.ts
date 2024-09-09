@@ -1,5 +1,5 @@
 import { Command } from "commander";
-import { getUserName } from "./user";
+import { getUserName, generateHash } from "./user";
 import { startChat, askForModelChoice } from "./chat";
 import { llmNames } from "./llms";
 
@@ -12,13 +12,16 @@ program
   .option('-m, --model <model>', 'Choose the model to use')
   .action(async (options) => {
     let userName = options.name || await getUserName(); 
-    let model = options.model
+    let userHash = generateHash(userName);
+    console.log(`MD5 Hash for ${userName}: ${userHash}`);
+    
+    let model = options.model || await askForModelChoice()
     let modelName= llmNames.find(llmName => llmName.toLowerCase() === model?.toLowerCase())
 
     if(!modelName){
-      console.log(`Invalid model: ${modelName}. Please choose a valid model.`)
+      console.log(`Invalid model. Please choose a valid model.`)
       model = await askForModelChoice(); 
-      modelName= llmNames.find(llmName => llmName.toLowerCase() === model.toLowerCase())
+      modelName= llmNames.find(llmName => llmName.toLowerCase() === model?.toLowerCase())
     }
 
     console.log(`Hello, ${userName}! Welcome to the CLI application.`);
