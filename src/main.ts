@@ -1,7 +1,7 @@
 import { Command } from "commander";
 import { getUserName } from "./user";
 import { startChat, askForModelChoice } from "./chat";
-import { llms, llmNames } from "./llms";
+import { llmNames } from "./llms";
 
 const program = new Command();
 
@@ -12,8 +12,14 @@ program
   .option('-m, --model <model>', 'Choose the model to use')
   .action(async (options) => {
     let userName = options.name || await getUserName(); 
-    let model = options.model || await askForModelChoice(); 
-    let modelName = llmNames.find(llmName => llmName.toLowerCase() === model.toLowerCase())
+    let model = options.model
+    let modelName= llmNames.find(llmName => llmName.toLowerCase() === model?.toLowerCase())
+
+    if(!modelName){
+      console.log(`Invalid model: ${modelName}. Please choose a valid model.`)
+      model = await askForModelChoice(); 
+      modelName= llmNames.find(llmName => llmName.toLowerCase() === model.toLowerCase())
+    }
 
     console.log(`Hello, ${userName}! Welcome to the CLI application.`);
     console.log(`Model chosen: ${modelName}`);
