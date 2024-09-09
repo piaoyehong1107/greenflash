@@ -24,15 +24,16 @@ const replicate = new Replicate({
   auth: replicateApiKey,
 });
 
-export async function fetchOpenaiResponse(query: string, prompt: string): Promise<string> {
+export async function fetchOpenaiResponse(systemPrompt: string, fullPrompt: string): Promise<string> {
+  console.log(fullPrompt)
   try {
     const response = await axios.post<OpenAIResponse>(
       openaiBaseUrl,
       {
         model: openaiModelName,
         messages: [
-          { role: "system", content: prompt },
-          { role: 'user', content: query }
+          { role: "system", content: systemPrompt },
+          { role: 'user', content: fullPrompt }
         ],
         max_tokens: 100,
       },
@@ -50,25 +51,23 @@ export async function fetchOpenaiResponse(query: string, prompt: string): Promis
   }
 }
 
-export async function fetchReplicateResponse(query: string, prompt: string): Promise<string> {
+export async function fetchReplicateResponse(systemPrompt: string, fullPrompt: string): Promise<string> {
+console.log(fullPrompt)
+
   const input = {
-    top_k: 50,
     top_p: 0.9,
-    prompt: query,
+    prompt: fullPrompt,
+    min_tokens: 0,
     temperature: 0.6,
-    system_prompt: prompt,
-    length_penalty: 1,
-    max_new_tokens: 512,
-    prompt_template: "<s>[INST] {prompt} [/INST] ",
-    presence_penalty: 0,
-  };
+    prompt_template: `<|begin_of_text|><|start_header_id|>system<|end_header_id|>\n\n${systemPrompt}<|eot_id|><|start_header_id|>user<|end_header_id|>\n\n{prompt}<|eot_id|><|start_header_id|>assistant<|end_header_id|>\n\n`,
+    presence_penalty: 1.15
+};
 
   let result = '';
 
   try {
     for await (const event of replicate.stream(replicateModelName, { input })) {
       const eventString = event.toString();
-      process.stdout.write(eventString);
       result += eventString;
     }
 

@@ -38,7 +38,9 @@ export async function startChat(modelName: string): Promise<void> {
     defaultInput: 'No'
   })
   if (systemPrompt.toLowerCase() ==='no'){
-    console.log("No system systemPrompt provided. Continuing with the default behavior.")
+
+    systemPrompt = "You are a very helpful, respectful and honest assistant."
+    console.log(`No system systemPrompt provided. Continuing with the default systemPrompt: ${systemPrompt}`)
   } else{
     console.log("System systemPrompt provided:", systemPrompt)
     conversationHistory.push(`System: ${systemPrompt}`)
@@ -54,18 +56,18 @@ export async function startChat(modelName: string): Promise<void> {
 
     try {
       let response: string;
-      const fullPrompt = `${systemPrompt}\n${conversationHistory.join('\n')}`
+      const fullPrompt = `${conversationHistory.join('\n')}`
       // console.log(fullPrompt)
 
-      if (modelName === 'Replicate') {
-        response = await fetchReplicateResponse(query, fullPrompt);
+      if (modelName.toLowerCase() === 'replicate') {
+        response = await fetchReplicateResponse(systemPrompt, fullPrompt);
         console.log('Response from Replicate:', response);
       } else {
-        response = await fetchOpenaiResponse(query, fullPrompt);
+        response = await fetchOpenaiResponse(systemPrompt, fullPrompt);
         console.log('Response from GPT-4:', response);
       }
 
-      conversationHistory.push(`Model: ${response}`)
+      conversationHistory.push(`${modelName}: ${response}`)
 
     } catch (error) {
       console.error(`Failed to fetch response from ${modelName}:`, error);
