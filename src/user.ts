@@ -18,3 +18,16 @@ export function askForRating(): void {
       console.log('Invalid rating. Please provide either 👍 or 👎.');
   }
 }
+
+export function askForConversion(): void {
+  const wantsConversion = readlineSync.question('Would you like to associate a conversion with the chat? (Default No): ', {
+    defaultInput: 'No'
+  }).toLowerCase();
+
+  if (wantsConversion === 'yes') {
+    const conversionValue = readlineSync.question('Please provide the value for the conversion (1~10): ');
+    console.log(`Conversion value recorded: ${conversionValue}`);
+  } else {
+    console.log('No conversion associated with the chat. Ending the process.');
+  }
+}

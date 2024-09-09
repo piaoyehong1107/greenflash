@@ -1,7 +1,7 @@
 import * as readlineSync from 'readline-sync';
-import { llmNames, llms } from './llms';
+import { llmNames} from './llms';
 import { fetchOpenaiResponse, fetchReplicateResponse } from './api';
-import { askForRating } from './user';
+import { askForRating, askForConversion } from './user';
 
 export async function askForModelChoice(): Promise<string> {
 
@@ -69,4 +69,5 @@ export async function startChat(modelName: string): Promise<void> {
   } while (query.toLowerCase() !== 'exit');
 
   askForRating();
+  askForConversion();
 }
