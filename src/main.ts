@@ -26,6 +26,4 @@ process.on('SIGTERM', () => {
   handleExit();
 });
 
-// aa- 4c250437 //
-// bb- 3f2bab85 //
-//krystal: 3e14b4e1 //
+
