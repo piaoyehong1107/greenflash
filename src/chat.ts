@@ -50,7 +50,8 @@ export async function startChat(modelName: string): Promise<void> {
     try {
       let response: string;
       const fullPrompt = `${conversationHistory.join('\n')}`
-      // console.log(fullPrompt)
+      console.log(fullPrompt)
+
 
       if (modelName.toLowerCase() === 'replicate') {
         response = await fetchReplicateResponse(systemPrompt, fullPrompt);
