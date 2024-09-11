@@ -1,7 +1,7 @@
 import * as readlineSync from 'readline-sync';
-import { llmNames, llms } from './llms';
+import { llmNames} from './llms';
 import { fetchOpenaiResponse, fetchReplicateResponse } from './api';
-import { askForRating } from './user';
+import { askForRating, askForConversion } from './user';
 
 export async function askForModelChoice(): Promise<string> {
 
@@ -21,13 +21,6 @@ export async function askForModelChoice(): Promise<string> {
 
 export async function startChat(modelName: string): Promise<void> {
 
-  const selectedLLM = llms.find(llm => llm.name.toLowerCase() === modelName.toLowerCase());
-
-  if (!selectedLLM) {
-    console.log(`Invalid model: ${modelName}. Please choose a valid model.`);
-    modelName = await askForModelChoice();
-  }
-
   console.log(`Starting chat with model: ${modelName}`);
 
   let query: string;
@@ -38,6 +31,7 @@ export async function startChat(modelName: string): Promise<void> {
     defaultInput: 'No'
   })
   if (systemPrompt.toLowerCase() ==='no'){
+
     systemPrompt = "You are a very helpful, respectful and honest assistant."
     console.log(`No system systemPrompt provided. Continuing with the default systemPrompt: ${systemPrompt}`)
   } else{
@@ -58,11 +52,12 @@ export async function startChat(modelName: string): Promise<void> {
       const fullPrompt = `${conversationHistory.join('\n')}`
       console.log(fullPrompt)
 
+
       if (modelName.toLowerCase() === 'replicate') {
-        response = await fetchReplicateResponse(query, fullPrompt);
+        response = await fetchReplicateResponse(systemPrompt, fullPrompt);
         console.log('Response from Replicate:', response);
       } else {
-        response = await fetchOpenaiResponse(query, fullPrompt);
+        response = await fetchOpenaiResponse(systemPrompt, fullPrompt);
         console.log('Response from GPT-4:', response);
       }
 
@@ -75,4 +70,5 @@ export async function startChat(modelName: string): Promise<void> {
   } while (query.toLowerCase() !== 'exit');
 
   askForRating();
+  askForConversion();
 }
