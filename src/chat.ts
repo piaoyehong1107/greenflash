@@ -1,7 +1,7 @@
 import * as readlineSync from 'readline-sync';
-import { llmNames, llms } from './llms';
+import { llmNames} from './llms';
 import { fetchOpenaiResponse, fetchReplicateResponse } from './api';
-import { askForRating } from './user';
+import { askForRating, askForConversion } from './conversion';
 
 export async function askForModelChoice(): Promise<string> {
 
@@ -20,13 +20,6 @@ export async function askForModelChoice(): Promise<string> {
 }
 
 export async function startChat(modelName: string): Promise<void> {
-
-  const selectedLLM = llms.find(llm => llm.name.toLowerCase() === modelName.toLowerCase());
-
-  if (!selectedLLM) {
-    console.log(`Invalid model: ${modelName}. Please choose a valid model.`);
-    modelName = await askForModelChoice();
-  }
 
   console.log(`Starting chat with model: ${modelName}`);
 
@@ -76,4 +69,5 @@ export async function startChat(modelName: string): Promise<void> {
   } while (query.toLowerCase() !== 'exit');
 
   askForRating();
+  askForConversion();
 }
