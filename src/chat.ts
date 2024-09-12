@@ -1,7 +1,7 @@
 import * as readlineSync from 'readline-sync';
 import { llmNames} from './llms';
 import { fetchOpenaiResponse, fetchReplicateResponse } from './api';
-import { askForRating, askForConversion } from './user';
+import { askForRating, askForConversion } from './conversion';
 
 export async function askForModelChoice(): Promise<string> {
 
