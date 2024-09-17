@@ -8,7 +8,8 @@ dotenv.config();
 const openaiApiKey = process.env.OPENAI_API_KEY;
 const replicateApiKey = process.env.REPLICATE_API_TOKEN;
 const openaiModelName = process.env.OPENAI_MODEL_NAME;
-const replicateModelName = process.env.REPLICATE_MODEL_NAME as `${string}/${string}` | `${string}/${string}:${string}`;
+const llama3ModelName = process.env.LLAMA3_MODEL_NAME as `${string}/${string}` | `${string}/${string}:${string}`;
+const reflectionModelName = process.env.REFLECTION_MODEL_NAME as `${string}/${string}` | `${string}/${string}:${string}`
 
 if (!openaiApiKey) {
   throw new Error('The OPENAI_API_KEY environment variable is missing or empty.');
@@ -25,7 +26,7 @@ const replicate = new Replicate({
 });
 
 export async function fetchOpenaiResponse(systemPrompt: string, fullPrompt: string): Promise<string> {
-  console.log(fullPrompt)   
+  // console.log(fullPrompt)   
   try {
     const response = await axios.post<OpenAIResponse>(
       openaiBaseUrl,
@@ -51,8 +52,7 @@ export async function fetchOpenaiResponse(systemPrompt: string, fullPrompt: stri
   }
 }
 
-export async function fetchReplicateResponse(systemPrompt: string, fullPrompt: string): Promise<string> {
-console.log(fullPrompt)
+export async function fetchLlama3Response(systemPrompt: string, fullPrompt: string): Promise<string> {
 
   const input = {
     top_p: 0.9,
@@ -66,14 +66,37 @@ console.log(fullPrompt)
   let result = '';
 
   try {
-    for await (const event of replicate.stream(replicateModelName, { input })) {
+    for await (const event of replicate.stream(llama3ModelName, { input })) {
       const eventString = event.toString();
       result += eventString;
     }
-
     return result;
   } catch (error) {
     console.error('Error calling Replicate API:', error);
-    throw new Error('Failed to stream response from Replicate API');
+    throw new Error('Failed to stream response from Llama3');
+  }
+}
+
+export async function fetchReflectionResponse(fullPrompt: string): Promise<string> {
+
+  let result = '';
+
+  try {
+    const response = await replicate.run(
+      reflectionModelName,
+      {
+        input: {
+          top_p: 0.9,
+          prompt: fullPrompt,
+          max_tokens: 256,
+          temperature: 0.7
+        }
+      }
+    )as string[];
+    result = response.join("")
+    return result;
+  } catch (error) {
+    console.error('Error calling Replicate API:', error);
+    throw new Error('Failed to stream response from Reflection');
   }
 }

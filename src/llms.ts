@@ -4,7 +4,8 @@ type LLM = {
 
 const llms: LLM[] = [
   { name: "GPT-4"},
-  { name: "Replicate"},
+  { name: "Llama3"},
+  { name: "Reflection"}
 ];
 const llmNames = llms.map((llm) => llm.name);
 

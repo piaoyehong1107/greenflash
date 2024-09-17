@@ -1,6 +1,6 @@
 import * as readlineSync from 'readline-sync';
 import { llmNames} from './llms';
-import { fetchOpenaiResponse, fetchReplicateResponse } from './api';
+import { fetchOpenaiResponse, fetchLlama3Response, fetchReflectionResponse } from './api';
 import { askForRating, askForConversion } from './conversion';
 
 export async function askForModelChoice(): Promise<string> {
@@ -52,9 +52,12 @@ export async function startChat(modelName: string): Promise<void> {
       const fullPrompt = `${conversationHistory.join('\n')}`
       // console.log(fullPrompt)
 
-      if (modelName.toLowerCase() === 'replicate') {
-        response = await fetchReplicateResponse(systemPrompt, fullPrompt);
-        console.log('Response from Replicate:', response);
+      if (modelName.toLowerCase() === 'llama3') {
+        response = await fetchLlama3Response(systemPrompt, fullPrompt);
+        console.log('Response from Llama3:', response);
+      } else if (modelName.toLowerCase() === 'reflection') {
+        response = await fetchReflectionResponse(fullPrompt);
+        console.log('Response from Reflection:', response);
       } else {
         response = await fetchOpenaiResponse(systemPrompt, fullPrompt);
         console.log('Response from GPT-4:', response);
