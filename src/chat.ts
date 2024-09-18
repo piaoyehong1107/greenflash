@@ -22,7 +22,7 @@ export async function askForModelChoice(): Promise<string> {
 }
 
 export async function startChat(modelName: string): Promise<void> {
-
+  console.log()
   console.log(`Starting chat with model: ${modelName}`);
   console.log()
 
@@ -50,6 +50,8 @@ export async function startChat(modelName: string): Promise<void> {
     if (query.toLowerCase() === 'exit') {
       console.log()
       console.log('Exiting the chat. Goodbye!');
+      console.log()
+      console.log('==============================')
       break;
     }
     conversationHistory.push(`You: ${query}`);
@@ -57,7 +59,6 @@ export async function startChat(modelName: string): Promise<void> {
     try {
       let response: string;
       const fullPrompt = `${conversationHistory.join('\n')}`
-      // console.log(fullPrompt)
 
       if (modelName.toLowerCase() === 'llama3') {
         response = await fetchLlama3Response(systemPrompt, fullPrompt);

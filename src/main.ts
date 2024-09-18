@@ -17,7 +17,7 @@ program.parse(process.argv);
 export async function handleChat(options: any): Promise<void> {
   let userName = options.name || await getUserName();
   let userHash = fnv1aHash(userName)
-  console.log(`FNV-1a Hash for ${userName}: ${userHash}`);
+  // console.log(`FNV-1a Hash for ${userName}: ${userHash}`);
 
   let model = options.model || await askForModelChoice();
   let modelName = llmNames.find(llmName => llmName.toLowerCase() === model?.toLowerCase());
@@ -29,15 +29,13 @@ export async function handleChat(options: any): Promise<void> {
     modelName = llmNames.find(llmName => llmName.toLowerCase() === model?.toLowerCase());
   }
 
+  console.log('==============================')
   console.log()
   console.log(`Hello, ${userName}! Welcome to the CLI application.`);
   console.log()
   console.log(`Model chosen: ${modelName}`);
 
   if (userName && modelName) {
-    console.log()
-    console.log(`Processing to chat...`);
-    console.log()
     await startChat(modelName);
   } else {
     console.log()
