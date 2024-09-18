@@ -23,18 +23,24 @@ export async function handleChat(options: any): Promise<void> {
   let modelName = llmNames.find(llmName => llmName.toLowerCase() === model?.toLowerCase());
 
   if (!modelName) {
+    console.log()
     console.log(`Invalid model. Please choose a valid model.`);
     model = await askForModelChoice();
     modelName = llmNames.find(llmName => llmName.toLowerCase() === model?.toLowerCase());
   }
 
+  console.log()
   console.log(`Hello, ${userName}! Welcome to the CLI application.`);
+  console.log()
   console.log(`Model chosen: ${modelName}`);
 
   if (userName && modelName) {
+    console.log()
     console.log(`Processing to chat...`);
+    console.log()
     await startChat(modelName);
   } else {
+    console.log()
     console.error('Error: Missing user name or invalid model choice.');
   }
 }
