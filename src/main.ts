@@ -3,6 +3,7 @@ import { getUserName, fnv1aHash} from "./user";
 import { llmNames } from "./llms";
 import { startChat, askForModelChoice } from "./chat";
 
+
 const program = new Command();
 
 program
