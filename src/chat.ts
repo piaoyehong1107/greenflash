@@ -1,48 +1,48 @@
 import * as readlineSync from 'readline-sync';
 import { llmNames} from './llms';
-import { fetchOpenaiResponse, fetchReplicateResponse } from './api';
+import { fetchOpenaiResponse, fetchLlama3Response, fetchReflectionResponse } from './api';
 import { askForRating, askForConversion } from './conversion';
 
 export async function askForModelChoice(): Promise<string> {
+  console.log('\nPlease choose a model:\n');
 
-  console.log('Please choose a model:');
   llmNames.forEach((model, index) => {
     console.log(`${index + 1}. ${model}`);
   });
 
-  const choiceIndex = readlineSync.questionInt('Enter the number corresponding to your model choice: ') - 1;
+  const choiceIndex = readlineSync.questionInt('\nEnter the number corresponding to your model choice: ') - 1;
 
   if (choiceIndex < 0 || choiceIndex >= llmNames.length) {
-    console.log('Invalid choice. Please try again.');
+    console.log('\nInvalid choice. Please try again.');
     return askForModelChoice();
   }
   return llmNames[choiceIndex];
 }
 
 export async function startChat(modelName: string): Promise<void> {
-
-  console.log(`Starting chat with model: ${modelName}`);
+  console.log(`\nStarting chat with model: ${modelName}`);
 
   let query: string;
   let systemPrompt: string
   let conversationHistory: string[] = [];
 
- systemPrompt = readlineSync.question("Would you like to provide a system systemPrompt?(Default No)", {
+ systemPrompt = readlineSync.question("\nWould you like to provide a system prompt?(Default No)", {
     defaultInput: 'No'
   })
   if (systemPrompt.toLowerCase() ==='no'){
-
     systemPrompt = "You are a very helpful, respectful and honest assistant."
-    console.log(`No system systemPrompt provided. Continuing with the default systemPrompt: ${systemPrompt}`)
+    console.log("\nNo system prompt provided. Continuing with the default system prompt:", systemPrompt)
+
   } else{
-    console.log("System systemPrompt provided:", systemPrompt)
-    conversationHistory.push(`System: ${systemPrompt}`)
+    console.log("\nSystem prompt provided:", systemPrompt)
+    conversationHistory.push(`System prompt: ${systemPrompt}`)
   }
 
   do {
-    query = readlineSync.question('Enter your query (type "exit" to quit): ');
+    query = readlineSync.question('\nEnter your query (type "exit" to quit): ');
     if (query.toLowerCase() === 'exit') {
-      console.log('Exiting the chat. Goodbye!');
+      console.log('\nExiting the chat. Goodbye!\n');
+      console.log('==============================')
       break;
     }
     conversationHistory.push(`You: ${query}`);
@@ -50,21 +50,21 @@ export async function startChat(modelName: string): Promise<void> {
     try {
       let response: string;
       const fullPrompt = `${conversationHistory.join('\n')}`
-      console.log(fullPrompt)
 
+      if (modelName.toLowerCase() === 'llama3') {
+        response = await fetchLlama3Response(systemPrompt, fullPrompt);
+        console.log('\nResponse from Llama3:', response);
 
-      if (modelName.toLowerCase() === 'replicate') {
-        response = await fetchReplicateResponse(systemPrompt, fullPrompt);
-        console.log('Response from Replicate:', response);
+      } else if (modelName.toLowerCase() === 'reflection') {
+        response = await fetchReflectionResponse(fullPrompt);
+        console.log('\nResponse from Reflection:', response);
       } else {
         response = await fetchOpenaiResponse(systemPrompt, fullPrompt);
-        console.log('Response from GPT-4:', response);
+        console.log('\nResponse from GPT-4:', response);
       }
-
       conversationHistory.push(`${modelName}: ${response}`)
-
     } catch (error) {
-      console.error(`Failed to fetch response from ${modelName}:`, error);
+      console.error(`\nFailed to fetch response from ${modelName}:`, error, '\n');
     }
 
   } while (query.toLowerCase() !== 'exit');
