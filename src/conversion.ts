@@ -1,36 +1,26 @@
 import * as readlineSync from "readline-sync";
 
 export function askForRating(): void {
-  console.log()
-    const rating = readlineSync.question('Please rate the chat (👍 or 👎): ');
+    const rating = readlineSync.question('\nPlease rate the chat (👍 or 👎): ');
     if (rating === '👍') {
-        console.log()
-        console.log('Thank you for the positive feedback!');
+        console.log('\nThank you for the positive feedback!');
     } else if (rating === '👎') {
-        console.log()
-        console.log('Sorry to hear that. We appreciate your feedback!');
+        console.log('\nSorry to hear that. We appreciate your feedback!');
     } else {
-        console.log()
-        console.log('Invalid rating. Please provide either 👍 or 👎.');
+        console.log('\nInvalid rating. Please provide either 👍 or 👎.');
         askForRating()
     }
   }
   
   export function askForConversion(): void {
-    console.log()
-    const wantsConversion = readlineSync.question('Would you like to associate a conversion with the chat? (Default No): ', {
+    const wantsConversion = readlineSync.question('\nWould you like to associate a conversion with the chat? (Default No): ', {
       defaultInput: 'No'
     }).toLowerCase();
   
     if (wantsConversion === 'yes') {
-      console.log()
-      const conversionValue = readlineSync.question('Please provide the value for the conversion (1~10): ');
-      console.log()
-      console.log(`Conversion value recorded: ${conversionValue}`);
-      console.log()
+      const conversionValue = readlineSync.question('\nPlease provide the value for the conversion (1~10): ');
+      console.log(`\nConversion value recorded: ${conversionValue}\n`);
     } else {
-      console.log()
-      console.log('No conversion associated with the chat. Ending the process.');
-      console.log()
+      console.log('\nNo conversion associated with the chat. Ending the process.\n');
     }
   }

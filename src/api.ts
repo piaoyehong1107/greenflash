@@ -26,7 +26,6 @@ const replicate = new Replicate({
 });
 
 export async function fetchOpenaiResponse(systemPrompt: string, fullPrompt: string): Promise<string> {
-  // console.log(fullPrompt)   
   try {
     const response = await axios.post<OpenAIResponse>(
       openaiBaseUrl,
